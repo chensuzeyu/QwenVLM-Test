@@ -5,10 +5,10 @@
 # model: Qwen3.5-397B-A17B
 # backend: eas
 
-system: "你是一个简洁、准确的助手。"
+system: "你是一个简洁、优雅、准确的助手。"
 
 user_text: |
-  你叫什么？用一句话回答。
+  你的模型型号是什么？知识库到什么时候停止更新，精确到年月。
 
 # 长文案可放到独立文件（路径相对本 YAML 所在目录）：
 # user_text_file: prompts/long_prompt.txt

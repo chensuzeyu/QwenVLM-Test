@@ -8,3 +8,7 @@ __pycache__/
 *.egg-info/
 dist/
 build/
+
+# 本地测试图片（勿提交隐私或大文件；目录由 local_images/.gitkeep 保留）
+local_images/*
+!local_images/.gitkeep

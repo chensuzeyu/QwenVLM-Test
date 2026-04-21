@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import base64
 import json
 from dataclasses import dataclass
 from pathlib import Path
@@ -19,6 +20,7 @@ class Scenario:
     user_text_file: str | None = None
     image_url: str | None = None
     image_base64_file: str | None = None
+    image_file: str | None = None
     image_mime: str = "image/png"
     model: str | None = None
     backend: str | None = None
@@ -67,6 +69,7 @@ class Scenario:
             user_text_file=opt_path("user_text_file"),
             image_url=opt_path("image_url"),
             image_base64_file=opt_path("image_base64_file"),
+            image_file=opt_path("image_file"),
             image_mime=mime,
             model=model,
             backend=backend,
@@ -91,10 +94,16 @@ class LoadedScenario:
                 raise FileNotFoundError(f"user_text_file not found: {path}")
             user_body = path.read_text(encoding="utf-8")
 
-        has_image = bool(s.image_url or s.image_base64_file)
+        img_sources = sum(
+            1 for x in (s.image_url, s.image_base64_file, s.image_file) if x
+        )
+        if img_sources > 1:
+            raise ValueError("image_url、image_base64_file、image_file 至多设置其一。")
+
+        has_image = bool(s.image_url or s.image_base64_file or s.image_file)
         if not has_image and not user_body.strip():
             raise ValueError(
-                "Scenario must set non-empty user_text / user_text_file, or provide image_url / image_base64_file."
+                "Scenario must set non-empty user_text / user_text_file, or provide image_url / image_base64_file / image_file."
             )
 
         msgs: list[dict[str, Any]] = []
@@ -107,6 +116,11 @@ class LoadedScenario:
             if not ip.is_file():
                 raise FileNotFoundError(f"image_base64_file not found: {ip}")
             b64 = ip.read_text(encoding="utf-8").strip()
+        elif s.image_file:
+            ip = (base / s.image_file).resolve()
+            if not ip.is_file():
+                raise FileNotFoundError(f"image_file not found: {ip}")
+            b64 = base64.b64encode(ip.read_bytes()).decode("ascii")
 
         if s.image_url or b64 is not None:
             msgs.append(

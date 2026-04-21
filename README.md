@@ -91,11 +91,32 @@ python -m vlm_bench --scenario scenarios/text_only.json --backend dashscope --mo
 | `system` | 可选；系统消息。 |
 | `user_text` | 用户文案；YAML 可用多行 `\|` / `>`。 |
 | `user_text_file` | 可选；相对场景目录的 `.txt`。**若设置，以文件为准**（覆盖 `user_text`）。 |
-| `image_url` / `image_base64_file` / `image_mime` | 多模态，同前。 |
+| `image_url` / `image_base64_file` / `image_file` / `image_mime` | 多模态：`image_file` 为相对场景目录的 **二进制** 图片路径（PNG/JPEG 等）；`image_base64_file` 仍为纯 base64 文本文件。三者与 `image_url` **至多选一**。 |
 | `model` | 可选；无 CLI `--model` 时用作默认模型。 |
 | `backend` | 可选；`eas` \| `dashscope`（仅 Proxy；无 CLI `--backend` 时使用）。 |
 
-仓库示例：`scenarios/text_only.yaml`、`scenarios/text_only.json`、`scenarios/multimodal.example.yaml`、`scenarios/prompts/sample_user.txt`。
+仓库示例：`scenarios/text_only.yaml`、`scenarios/text_only.json`、`scenarios/multimodal.example.yaml`、`scenarios/image_local.example.yaml`、`scenarios/prompts/sample_user.txt`。
+
+### 本地图片目录（不提交到 git）
+
+将待测图片放在仓库根目录的 **`local_images/`**：该目录下除 `.gitkeep` 外的文件默认被 `.gitignore` 忽略，避免误传隐私或大文件。在场景 YAML 中用 `image_file: ../local_images/你的图.png`（路径相对 **场景文件所在目录**）并设置正确的 `image_mime`（如 `image/jpeg`）。
+
+**问答示例（可写入 `user_text` 或 `prompts/*.txt`）**
+
+| 目的 | 示例问法 |
+|------|----------|
+| 整体描述 | 「请用一两句中文描述这张图片的主要内容。」 |
+| 物体/计数 | 「图中有哪些主要物体？大约各有多少个？」 |
+| 文字 OCR | 「图片里可见的文字是什么？请按阅读顺序列出。」 |
+| 细节推理 | 「图中人物大概在做什么？依据画面中的哪些线索？」 |
+
+**运行示例**
+
+```powershell
+# 先将图片保存为 local_images\my_test.png，并复制 scenarios\image_local.example.yaml 按需改名修改
+python -m vlm_bench --scenario scenarios/image_local.example.yaml --no-thinking
+python -m vlm_bench --scenario scenarios/image_local.example.yaml --no-thinking --backend dashscope --model qwen3.5-397b-a17b
+```
 
 指定 `--scenario` 时仍忽略 `--prompt`、`--system`、`--image-*`（避免重复定义）。
 
@@ -109,7 +130,7 @@ python -m vlm_bench --scenario scenarios/text_only.json --backend dashscope --mo
 | 两轮对比 | `python -m vlm_bench --no-thinking --thinking` |
 | Proxy + DashScope | `python -m vlm_bench --backend dashscope --model qwen3.5-plus --no-thinking` |
 | JSON 行输出 | `python -m vlm_bench --json` |
-| 场景文件 | `python -m vlm_bench --scenario scenarios/text_only.yaml` |
+| 场景文件 | `python -m vlm_bench --no-thinking --scenario scenarios/text_only.yaml` |
 | 临时一行（无场景） | `python -m vlm_bench --prompt "你好"` |
 
 安装后也可：`vlm-bench`。
@@ -149,10 +170,12 @@ print(m.ttft_s, m.subsequent_tokens_per_s, m.text, m.extra)
 ├── README.md
 ├── pyproject.toml
 ├── requirements.txt
+├── local_images/            # 本地测试图（内容默认 gitignore，仅保留 .gitkeep）
 ├── scenarios/
 │   ├── text_only.yaml
 │   ├── text_only.json
 │   ├── multimodal.example.yaml
+│   ├── image_local.example.yaml
 │   └── prompts/
 │       └── sample_user.txt
 └── vlm_bench/

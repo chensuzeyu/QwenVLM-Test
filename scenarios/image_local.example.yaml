@@ -1,0 +1,17 @@
+# 本地图片测试：把图片放在仓库根目录的 local_images/（该目录默认被 git 忽略）。
+# 复制本文件为例如 scenarios/my_image.yaml，修改 image_file 与问答文案后运行：
+#   python -m vlm_bench --scenario scenarios/my_image.yaml --no-thinking
+
+system: "你是一个严谨的多模态助手，根据用户提供的图片作答。"
+
+user_text: |
+  请描述这张图片里的主要内容（物体、场景或文字），用一两句中文回答。
+
+# 相对本 YAML 所在目录的路径（此处示例指向仓库根目录下的 local_images/）
+# image_file: ../local_images/my_test.png
+image_file: ../local_images/sim_cam0_960x540_20260420T021954Z_seq0001.png
+image_mime: image/png
+
+# 多模态建议走 Proxy + DashScope，并选用 VL 模型（按 .env 与线路调整）
+# backend: dashscope
+# model: qwen3-vl-235b-a22b-instruct
