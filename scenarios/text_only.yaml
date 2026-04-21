@@ -1,0 +1,18 @@
+# 纯文本场景：在 IDE 里直接编辑，无需改命令行。
+# 使用：python -m vlm_bench --scenario scenarios/text_only.yaml
+#
+# 可选（仅设置 PROXY_BASE_URL 时生效）：与 CLI --model / --backend 同优先级，CLI 优先。
+# model: Qwen3.5-397B-A17B
+# backend: eas
+
+system: "你是一个简洁、准确的助手。"
+
+user_text: |
+  你叫什么？用一句话回答。
+
+# 长文案可放到独立文件（路径相对本 YAML 所在目录）：
+# user_text_file: prompts/long_prompt.txt
+
+image_url: null
+image_base64_file: null
+image_mime: image/png

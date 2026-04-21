@@ -1,0 +1,10 @@
+{
+  "system": "你是一个简洁、准确的助手。",
+  "user_text": "你叫什么？用一句话回答。",
+  "user_text_file": null,
+  "image_url": null,
+  "image_base64_file": null,
+  "image_mime": "image/png",
+  "model": null,
+  "backend": null
+}

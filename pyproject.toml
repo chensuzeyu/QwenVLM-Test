@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vlm-bench"
+version = "0.1.0"
+description = "Small benchmark harness for OpenAI-compatible VLMs (Qwen3.5 EAS, etc.)"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "httpx>=0.27.0,<1",
+  "python-dotenv>=1.0.0,<2",
+  "pyyaml>=6.0.1,<7",
+]
+
+[project.scripts]
+vlm-bench = "vlm_bench.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["vlm_bench*"]

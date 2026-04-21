@@ -1,0 +1,13 @@
+# 多模态示例：文本来自文件 + 可选 base64 图片文件。
+# 复制为本目录下自定义文件名后修改路径；不要将含隐私的图片提交到仓库。
+
+system: "你是一个多模态助手。"
+
+# 与 user_text 二选一：若设置了 user_text_file，则以文件内容为准。
+user_text: ""
+user_text_file: prompts/sample_user.txt
+
+# 任选其一：公网 / Data URL，或指向「纯 base64 字符串」的文本文件（相对本 YAML 目录）。
+image_url: null
+# image_base64_file: assets/screenshot.b64.txt
+image_mime: image/png
